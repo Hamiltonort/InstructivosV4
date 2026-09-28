@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procables - Módulo de Capacitación</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* Botón interactivo flotante sobre el video */
+        .interactive-btn {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none; /* Aparece en momentos clave */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" style="max-width: 800px;">
+        <h2 id="tituloMaquina">Cargando Estación...</h2>
+        
+        <div class="video-container">
+            <!-- Reproductor multimedia local (REQ006) -->
+            <video id="videoInstructivo" controls>
+                <source src="" type="video/mp4" id="videoSource">
+                Tu navegador no soporta video local.
+            </video>
+            <!-- Elemento interactivo flotante (REQ004) -->
+            <button id="btnInteractivo" class="interactive-btn" onclick="mostrarAyuda()">💡 Ver Tip de Seguridad</button>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <a href="menu.html" class="btn" style="background-color: #6c757d; text-decoration: none; line-height: 45px;">Regresar al Menú</a>
+        </div>
+    </div>
+
+    <script>
+        // Capturamos qué máquina se seleccionó por la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const maquina = urlParams.get('maquina') || 'trefiladora';
+
+        const titulo = document.getElementById('tituloMaquina');
+        const videoSource = document.getElementById('videoSource');
+        const videoElement = document.getElementById('videoInstructivo');
+        const btnInteractivo = document.getElementById('btnInteractivo');
+
+        // Configuramos textos y rutas locales según la máquina
+        if(maquina === 'trefiladora') {
+            titulo.innerText = "Capacitación: Máquina Trefiladora";
+            videoSource.src = "assets/videos/trefiladora.mp4";
+        } else if(maquina === 'cableadora') {
+            titulo.innerText = "Capacitación: Máquina Cableadora";
+            videoSource.src = "assets/videos/cableadora.mp4";
+        } else if(maquina === 'extrusora') {
+            titulo.innerText = "Capacitación: Máquina Extrusora";
+            videoSource.src = "assets/videos/extrusora.mp4";
+        }
+        videoElement.load();
+
+        // Ejemplo interactivo: Mostrar botón flotante cuando el video llegue al segundo 5
+        videoElement.addEventListener('timeupdate', function() {
+            if(videoElement.currentTime >= 5 && videoElement.currentTime <= 10) {
+                btnInteractivo.style.display = 'block';
+            } else {
+                btnInteractivo.style.display = 'none';
+            }
+        });
+
+        function mostrarAyuda() {
+            videoElement.pause();
+            alert("¡Punto clave de seguridad! Verifique los EPP antes de continuar operando esta sección.");
+            videoElement.play();
+        }
+    </script>
+</body>
+</html>
